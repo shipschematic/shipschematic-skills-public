@@ -1,0 +1,35 @@
+{
+  "name": "design-judges",
+  "version": "1.0.0",
+  "description": "Install design judge skills for book covers, pages, carousels, and YouTube thumbnails.",
+  "type": "module",
+  "bin": {
+    "design-judges": "bin/install.js"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "agent-skills",
+    "opencode",
+    "claude-code",
+    "design-review",
+    "design-system",
+    "book-design",
+    "carousel",
+    "thumbnail"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shipblueprint/design-judges.git"
+  },
+  "homepage": "https://github.com/shipblueprint/design-judges#readme",
+  "bugs": "https://github.com/shipblueprint/design-judges/issues",
+  "license": "MIT"
+}
