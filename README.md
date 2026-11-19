@@ -77,15 +77,18 @@ node bin/install.js --dest /tmp/design-judges-test
 
 ## Publish
 
-Maintainer flow. Requires npm login and a clean tree.
+Maintainer flow. Requires npm login, `gh` login, and a clean tree.
 
 ```bash
-npm version patch
-git push --follow-tags
-npm publish --access public
+./publish.sh patch        # bump, publish, push tag, attach release
+./publish.sh              # publish the current version
+NPM_OTP=123456 ./publish.sh patch
+NPM_TOKEN=npm_... ./publish.sh patch
 ```
 
-Releases after the first publish run from GitHub Actions with npm provenance. Enable trusted publishing on npmjs.com for `shipblueprint/design-judges`, workflow `publish.yml`.
+The script checks the tree, publishes, verifies the registry version, pushes the commit and tag, and uploads the tarball to the GitHub release.
+
+Releases after the first publish can run from GitHub Actions with npm provenance. Enable trusted publishing on npmjs.com for `shipblueprint/design-judges`, workflow `publish.yml`.
 
 ## License
 
