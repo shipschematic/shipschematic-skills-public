@@ -1,0 +1,35 @@
+{
+  "name": "@shipschematic/design-judges",
+  "version": "1.0.0",
+  "description": "Public design judge skills for book covers, pages, carousels, and YouTube thumbnails.",
+  "type": "module",
+  "bin": {
+    "design-judges": "bin/install.js"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shipblueprint/shipschematic-skills-public.git",
+    "directory": "packs/design-judges"
+  },
+  "keywords": [
+    "agent-skills",
+    "opencode",
+    "claude-code",
+    "design-review",
+    "book-design",
+    "carousel",
+    "thumbnail"
+  ],
+  "license": "MIT"
+}

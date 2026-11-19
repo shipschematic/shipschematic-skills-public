@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { cp, mkdir, readdir, rm } from "node:fs/promises";
+import { cp, mkdir, readdir, readFile, rm } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "skills");
 
+const pkg = JSON.parse(await readFile(join(ROOT, "package.json"), "utf8"));
 const args = process.argv.slice(2);
 const has = (flag) => args.includes(flag);
 const value = (flag) => {
@@ -16,26 +17,22 @@ const value = (flag) => {
 };
 
 const help = `
-Install design judge skills.
+Install ${pkg.name}.
 
 Usage:
-  npx design-judges                 install into ./.opencode/skills
-  npx design-judges --global        install into ~/.config/opencode/skills
-  npx design-judges --claude        install into ./.claude/skills
-  npx design-judges --global --claude  install into ~/.claude/skills
-  npx design-judges --dest <path>   install into a custom directory
+  npx ${pkg.name}                    install into ./.opencode/skills
+  npx ${pkg.name} --global           install into ~/.config/opencode/skills
+  npx ${pkg.name} --claude           install into ./.claude/skills
+  npx ${pkg.name} --global --claude  install into ~/.claude/skills
+  npx ${pkg.name} --dest <path>      install into a custom directory
 
 Options:
   -g, --global     user-level skill directory
   -c, --claude     Claude Code layout instead of OpenCode
   -f, --force      overwrite installed skills
       --only <a,b> install only the named skills
-      --list       list available skills
+      --list       list skills in this pack
   -h, --help       show this help
-
-Examples:
-  npx design-judges --only cover-judge,page-judge
-  npx design-judges --global --force
 `.trim();
 
 if (has("--help") || has("-h")) {
