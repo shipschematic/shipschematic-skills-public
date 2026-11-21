@@ -39,7 +39,8 @@ scripts/
   install.js              installer source
   sync-bin.js             copies the installer into each pack
   list.js
-publish.sh                publish one pack
+.github/workflows/        CI and npm release
+.changeset/               versioning and changelogs
 ```
 
 Add a pack:
@@ -49,14 +50,35 @@ Add a pack:
 3. Run `npm run sync:bin`.
 4. Add the pack to the table above.
 
-## Publish
+## Release
+
+Releases are CI-only. The package publishes to npm through Trusted Publishing (OIDC), with no npm token.
+
+The first publish is the exception. npm requires the package to exist before Trusted Publishing can be configured.
+
+1. After npm access is restored, publish `1.0.0` once with a token:
 
 ```bash
-./publish.sh design-judges patch
-./publish.sh design-judges
+npm login
+npm publish -w @shipschematic/design-judges --access public
 ```
 
-Each pack publishes independently. Versions and tags are per pack.
+2. Configure Trusted Publishing on npm for `@shipschematic/design-judges`: repository `shipschematic/shipschematic-skills-public`, workflow `release.yml`.
+3. Enable the release workflow:
+
+```bash
+gh variable set NPM_PUBLISH_ENABLED --body true
+```
+
+4. For future releases, add a changeset:
+
+```bash
+npx changeset
+```
+
+Merge the PR, merge the Version Packages PR, and the Release workflow publishes, tags, and creates a GitHub release.
+
+Never run `npm publish` after the bootstrap. Versions come from Changesets.
 
 ## License
 

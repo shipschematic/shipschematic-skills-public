@@ -9,9 +9,16 @@
   "scripts": {
     "sync:bin": "node scripts/sync-bin.js",
     "pack:all": "npm pack --workspaces",
-    "list": "node scripts/list.js"
+    "list": "node scripts/list.js",
+    "validate": "npm pack --workspaces --dry-run",
+    "changeset": "changeset",
+    "version": "changeset version && npm install --package-lock-only --ignore-scripts",
+    "release": "changeset publish"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^3.0.3"
   }
 }
