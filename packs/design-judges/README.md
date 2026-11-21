@@ -2,7 +2,15 @@
 
 Public. Five agent skills that gate design work. Ten gated sections each. One failed gate blocks ship.
 
+The package lives on GitHub Packages. Add this to `.npmrc` and export a token with `read:packages` first:
+
+```
+@shipschematic:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
 ```bash
+export GITHUB_TOKEN=<token with read:packages>
 npx @shipschematic/design-judges
 ```
 

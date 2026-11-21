@@ -2,6 +2,8 @@
 
 Use this once the npm account is unsuspended. The public package is ready; CI publishing is gated until the one-time bootstrap is done.
 
+> Releases currently go to GitHub Packages. See `RELEASING.md`. Use this checklist only to switch back to npmjs.
+
 ## Current state
 
 - Package: `@shipschematic/design-judges`

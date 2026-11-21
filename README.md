@@ -10,7 +10,15 @@ Public skill packs. One repo, one pack per job, one installer per pack.
 
 ## Install
 
+The package lives on GitHub Packages, which requires authentication even for public packages. Add this to `.npmrc` and export a token with `read:packages`:
+
+```
+@shipschematic:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
 ```bash
+export GITHUB_TOKEN=<token with read:packages>
 npx @shipschematic/design-judges
 ```
 
@@ -39,7 +47,7 @@ scripts/
   install.js              installer source
   sync-bin.js             copies the installer into each pack
   list.js
-.github/workflows/        CI and npm release
+.github/workflows/        CI and GitHub Packages release
 .changeset/               versioning and changelogs
 ```
 
@@ -52,25 +60,15 @@ Add a pack:
 
 ## Release
 
-Releases are CI-only. The package publishes to npm through Trusted Publishing (OIDC), with no npm token.
+Releases are CI-only. The package publishes to GitHub Packages with the workflow `GITHUB_TOKEN`; no long-lived npm token is stored.
 
-The first publish is the exception. npm requires the package to exist before Trusted Publishing can be configured.
-
-1. After npm access is restored, publish `1.0.0` once with a token:
+First publish:
 
 ```bash
-npm login
-npm publish -w @shipschematic/design-judges --access public
+gh workflow run release.yml
 ```
 
-2. Configure Trusted Publishing on npm for `@shipschematic/design-judges`: repository `shipschematic/shipschematic-skills-public`, workflow `release.yml`.
-3. Enable the release workflow:
-
-```bash
-gh variable set NPM_PUBLISH_ENABLED --body true
-```
-
-4. For future releases, add a changeset:
+For later releases, add a changeset:
 
 ```bash
 npx changeset
@@ -78,11 +76,11 @@ npx changeset
 
 Merge the PR, merge the Version Packages PR, and the Release workflow publishes, tags, and creates a GitHub release.
 
-Never run `npm publish` after the bootstrap. Versions come from Changesets.
+Never run `npm publish` by hand. Versions come from Changesets.
 
-See [RELEASING.md](RELEASING.md) for the full checklist, trusted publisher setup, and troubleshooting.
+See [RELEASING.md](RELEASING.md) for the full checklist and troubleshooting.
 
-For the one-time npm account restore, use [NPM_RESTORE.md](NPM_RESTORE.md).
+npmjs publishing is disabled while the npm account is suspended. The restore checklist is in [NPM_RESTORE.md](NPM_RESTORE.md).
 
 ## License
 

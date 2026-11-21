@@ -13,6 +13,7 @@
     "LICENSE"
   ],
   "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
     "access": "public"
   },
   "engines": {
@@ -20,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shipblueprint/shipschematic-skills-public.git",
+    "url": "git+https://github.com/shipschematic/shipschematic-skills-public.git",
     "directory": "packs/design-judges"
   },
   "keywords": [
