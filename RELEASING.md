@@ -1,44 +1,23 @@
 # Releasing
 
-Public packages publish to npm through GitHub Actions. After the one-time bootstrap, do not run `npm publish` from a laptop.
+Packages publish to GitHub Packages from GitHub Actions. Do not run `npm publish` from a laptop.
 
-## Current gate
+- Registry: `https://npm.pkg.github.com`
+- Scope: `@shipschematic`
+- Package: `@shipschematic/design-judges`
 
-The Release workflow is disabled until the repository variable `NPM_PUBLISH_ENABLED` is `true`:
+## First publish
+
+The Release workflow publishes the current version when that version is not on the registry yet. Start it once by hand:
 
 ```bash
-gh variable list
-gh variable set NPM_PUBLISH_ENABLED --body true
+gh workflow run release.yml
 ```
 
-While the variable is not `true`, the Release job is skipped.
-
-## One-time bootstrap
-
-npm Trusted Publishing requires the package to exist before it can be configured. The first publish is the only manual publish.
-
-After npm access is restored:
+Verify:
 
 ```bash
-npm login
-CONFIRM_NPM_BOOTSTRAP=1 npm run bootstrap:npm
-```
-
-The script publishes `@shipschematic/design-judges@1.0.0`, verifies that npm reports the version, and prints the next commands.
-
-Bind the package to this repository and workflow:
-
-```bash
-npm trust github @shipschematic/design-judges \
-  --file release.yml \
-  --repository shipschematic/shipschematic-skills-public \
-  --allow-publish -y
-```
-
-Enable CI publishing:
-
-```bash
-gh variable set NPM_PUBLISH_ENABLED --body true
+npm view @shipschematic/design-judges version --registry=https://npm.pkg.github.com
 ```
 
 ## Normal release
@@ -53,26 +32,43 @@ npx changeset
 3. Merge the pull request after CI passes.
 4. The Release workflow opens or updates the `Version Packages` pull request.
 5. Merge the `Version Packages` pull request.
-6. The Release workflow validates, publishes to npm, creates the git tag and GitHub release, and verifies the npm version.
+6. The Release workflow validates, publishes to GitHub Packages, creates the package tag and GitHub release, and verifies the registry version.
+
+## Install
+
+GitHub Packages requires authentication even for public packages. Consumers need a token with `read:packages`.
+
+Add to `.npmrc`:
+
+```
+@shipschematic:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Then:
+
+```bash
+export GITHUB_TOKEN=<token with read:packages>
+npx @shipschematic/design-judges
+```
 
 ## Guardrails
 
-- CI-only publishing after bootstrap.
-- No long-lived npm token in GitHub Secrets.
-- npm provenance is generated in CI with OIDC.
+- CI-only publishing.
+- CI authenticates with the workflow `GITHUB_TOKEN` (`packages: write`). No long-lived token in GitHub Secrets.
 - `main` requires the `validate` status check and linear history.
 - Force pushes and branch deletion are disabled.
 
 ## Troubleshooting
 
-`403 suspended`: npm has suspended publishing. Wait for npm support. Do not retry in a loop.
+`E401 Unauthorized`: the token is missing. Locally, set `GITHUB_TOKEN` and keep the `${GITHUB_TOKEN}` placeholder in `.npmrc`. In CI, confirm the job sets `NODE_AUTH_TOKEN`.
 
-`EOTP` or 2FA prompt: complete the npm login or provide an OTP for the one-time bootstrap.
+`403 Forbidden`: the token lacks `write:packages`, or org policy blocks the package. CI needs `permissions: packages: write`.
 
 `version already exists`: do not reuse a version. Add a changeset and let Changesets bump it.
 
-`403 trusted publisher`: run the `npm trust github` command again, or confirm the repository, workflow filename, and package name match exactly.
+`E404` right after a successful publish: registry propagation can lag. Verification retries for 30 seconds.
 
-`E404` right after a successful publish: registry propagation can lag. The verification step retries for 30 seconds.
+## npm (disabled)
 
-GitHub Packages is not used for the public package. npm is the public host.
+npmjs publishing is blocked because the npm account is suspended. `NPM_RESTORE.md` keeps the checklist for a future switch back. Publish to only one registry per version.

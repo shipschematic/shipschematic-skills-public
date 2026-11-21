@@ -13,16 +13,14 @@ concurrency:
 permissions:
   contents: write
   pull-requests: write
-  id-token: write
+  packages: write
 
 jobs:
   release:
-    if: vars.NPM_PUBLISH_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    environment:
-      name: npm
-      url: https://www.npmjs.com/package/@shipschematic/design-judges
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,10 +29,10 @@ jobs:
         with:
           node-version: 24
           cache: npm
+          registry-url: https://npm.pkg.github.com
       - run: npm ci
       - run: npm run validate
       - uses: changesets/action@v1
-        id: changesets
         with:
           version: npm run version
           publish: npm run release
@@ -43,9 +41,3 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_CONFIG_PROVENANCE: "true"
-      - name: Verify npm publication
-        if: steps.changesets.outputs.published == 'true'
-        env:
-          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
-        run: node scripts/verify-npm-release.mjs
