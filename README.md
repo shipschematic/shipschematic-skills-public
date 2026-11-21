@@ -82,6 +82,8 @@ Never run `npm publish` after the bootstrap. Versions come from Changesets.
 
 See [RELEASING.md](RELEASING.md) for the full checklist, trusted publisher setup, and troubleshooting.
 
+For the one-time npm account restore, use [NPM_RESTORE.md](NPM_RESTORE.md).
+
 ## License
 
 MIT
