@@ -41,3 +41,5 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify GitHub Packages publication
+        run: node scripts/verify-github-packages.mjs
