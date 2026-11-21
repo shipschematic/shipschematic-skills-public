@@ -80,6 +80,8 @@ Merge the PR, merge the Version Packages PR, and the Release workflow publishes,
 
 Never run `npm publish` after the bootstrap. Versions come from Changesets.
 
+See [RELEASING.md](RELEASING.md) for the full checklist, trusted publisher setup, and troubleshooting.
+
 ## License
 
 MIT
