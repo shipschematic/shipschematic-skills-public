@@ -71,4 +71,4 @@ npx @shipschematic/design-judges
 
 ## npmjs (bootstrap pending)
 
-The package is not on npmjs yet. [NPM_RESTORE.md](NPM_RESTORE.md) has the one-time bootstrap and Trusted Publishing checklist. The npmjs CI workflow is not wired. Publish to only one registry per version.
+The package is not on npmjs yet. [NPM_RESTORE.md](NPM_RESTORE.md) has the one-time bootstrap and Trusted Publishing checklist. The npmjs CI workflow is not wired. `1.0.0` is already on GitHub Packages; the bootstrap publishes that same version to npmjs. After bootstrap, do not bump one registry alone.

@@ -11,6 +11,7 @@ Use this once the npm account is clear to publish. The public package is ready; 
 - Bootstrap target: `https://registry.npmjs.org/`
 - Package `publishConfig.registry`: GitHub Packages. npmjs requires an explicit `--registry` override.
 - Status: not published to npmjs; `npm view` returns `E404`
+- Existing release: `1.0.0` is already on GitHub Packages. The bootstrap publishes the same version to npmjs.
 - Release workflow: GitHub Packages only. It does not publish to npmjs yet.
 - CI: passing
 - Branch protection: `validate` required, linear history, no force push or delete
