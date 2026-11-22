@@ -13,10 +13,11 @@ const pkg = JSON.parse(
 );
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 const spec = `${pkg.name}@${pkg.version}`;
+const REGISTRY = "https://registry.npmjs.org/";
 
 function npmView() {
   try {
-    return execFileSync(npm, ["view", spec, "version"], {
+    return execFileSync(npm, ["view", spec, "version", "--registry", REGISTRY], {
       cwd: ROOT,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
@@ -48,10 +49,18 @@ if (checkOnly) {
   process.exit(0);
 }
 
-console.log(`Publishing ${spec} once with a token.`);
+console.log(`Publishing ${spec} once to ${REGISTRY}.`);
 execFileSync(
   npm,
-  ["publish", "-w", pkg.name, "--access", "public"],
+  [
+    "publish",
+    "-w",
+    pkg.name,
+    "--access",
+    "public",
+    "--registry",
+    REGISTRY,
+  ],
   { cwd: ROOT, stdio: "inherit" },
 );
 
