@@ -50,6 +50,21 @@ if (checkOnly) {
 }
 
 console.log(`Publishing ${spec} once to ${REGISTRY}.`);
+execFileSync(npm, ["run", "validate"], { cwd: ROOT, stdio: "inherit" });
+execFileSync(
+  npm,
+  [
+    "publish",
+    "-w",
+    pkg.name,
+    "--access",
+    "public",
+    "--registry",
+    REGISTRY,
+    "--dry-run",
+  ],
+  { cwd: ROOT, stdio: "inherit" },
+);
 execFileSync(
   npm,
   [
@@ -77,9 +92,9 @@ if (published !== pkg.version) {
 }
 
 console.log(`Published and verified ${spec}.`);
-console.log("Next, bind npm to GitHub Actions:");
+console.log("Next, add and test .github/workflows/npm-publish.yml.");
+console.log("Then bind that exact workflow as the trusted publisher:");
 console.log(
-  `  npm trust github ${pkg.name} --file release.yml --repository shipschematic/shipschematic-skills-public --allow-publish -y`,
+  `  npm trust github ${pkg.name} --file npm-publish.yml --repository shipschematic/shipschematic-skills-public --allow-publish -y`,
 );
-console.log("Then enable the release workflow:");
-console.log("  gh variable set NPM_PUBLISH_ENABLED --body true");
+console.log("Do not set NPM_PUBLISH_ENABLED; no workflow reads it.");
