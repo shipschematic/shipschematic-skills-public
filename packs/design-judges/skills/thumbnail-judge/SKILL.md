@@ -39,7 +39,7 @@ Every gate applies at full size, at feed size ≈ 160–240 px wide, and under t
 - [ ] Exactly one primary hero, identifiable in < 1 second.
 - [ ] Hero is the most remarkable element of the actual video.
 - [ ] Hero dominates; secondary elements support, never match its weight.
-- [ ] Metaphor matches the title predicate: "broken" shows fracture, not absence; "secret" shows redaction, not display.
+- [ ] Metaphor matches the title predicate: "broken" shows fracture, not absence; "hidden" shows redaction, not display.
 - [ ] Lighting separates: key plus rim, or spotlight. Flat even light fails.
 - [ ] Background simplified or darkened; no clutter behind the hero.
 - [ ] With no face, the object is large, high-contrast, and iconic.
