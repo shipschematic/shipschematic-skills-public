@@ -8,6 +8,16 @@ Public skill packs. One repo, one pack per job, one installer per pack.
 |---|---|---|
 | `packs/design-judges` | `@shipschematic/design-judges` | book-design-judge, cover-judge, page-judge, carousel-judge, thumbnail-judge |
 
+## Skills
+
+| Skill | Judges | Install |
+|---|---|---|
+| `book-design-judge` | Print book cover or interior page, 7×9.25 in, two-ink | `npx @shipschematic/design-judges --only book-design-judge` |
+| `cover-judge` | A5 screen-edition book cover, HTML and PDF | `npx @shipschematic/design-judges --only cover-judge` |
+| `page-judge` | A5 screen-edition book page, type, figures, accessibility | `npx @shipschematic/design-judges --only page-judge` |
+| `carousel-judge` | LinkedIn, Instagram, and X carousels | `npx @shipschematic/design-judges --only carousel-judge` |
+| `thumbnail-judge` | YouTube thumbnail, 1280×720, mobile-first | `npx @shipschematic/design-judges --only thumbnail-judge` |
+
 ## Install
 
 The package lives on GitHub Packages, which requires authentication even for public packages. Add this to `.npmrc` and export a token with `read:packages`:
