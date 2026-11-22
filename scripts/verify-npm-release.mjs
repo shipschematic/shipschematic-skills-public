@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
 
+const REGISTRY = "https://registry.npmjs.org/";
 const raw = process.env.PUBLISHED_PACKAGES;
 if (!raw || raw === "[]") {
   console.log("No packages published.");
@@ -13,7 +14,7 @@ for (const pkg of packages) {
 
   for (let attempt = 0; attempt < 6; attempt += 1) {
     try {
-      actual = execFileSync("npm", ["view", spec, "version"], {
+      actual = execFileSync("npm", ["view", spec, "version", "--registry", REGISTRY], {
         encoding: "utf8",
         stdio: ["ignore", "pipe", "ignore"],
       }).trim();

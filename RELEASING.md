@@ -1,6 +1,6 @@
 # Releasing
 
-Packages publish to GitHub Packages from GitHub Actions. Do not run `npm publish` from a laptop.
+Packages publish to GitHub Packages from GitHub Actions. Do not run `npm publish` from a laptop, except the one-time npmjs bootstrap in [NPM_RESTORE.md](NPM_RESTORE.md).
 
 - Registry: `https://npm.pkg.github.com`
 - Scope: `@shipschematic`
@@ -69,6 +69,6 @@ npx @shipschematic/design-judges
 
 `E404` right after a successful publish: registry propagation can lag. Verification retries for 30 seconds.
 
-## npm (disabled)
+## npmjs (bootstrap pending)
 
-npmjs publishing is blocked because the npm account is suspended. `NPM_RESTORE.md` keeps the checklist for a future switch back. Publish to only one registry per version.
+The package is not on npmjs yet. [NPM_RESTORE.md](NPM_RESTORE.md) has the one-time bootstrap and Trusted Publishing checklist. The npmjs CI workflow is not wired. Publish to only one registry per version.

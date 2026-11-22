@@ -86,11 +86,11 @@ npx changeset
 
 Merge the PR, merge the Version Packages PR, and the Release workflow publishes, tags, and creates a GitHub release.
 
-Never run `npm publish` by hand. Versions come from Changesets.
+Never run `npm publish` by hand, except the one-time npmjs bootstrap in [NPM_RESTORE.md](NPM_RESTORE.md). Versions come from Changesets.
 
 See [RELEASING.md](RELEASING.md) for the full checklist and troubleshooting.
 
-npmjs publishing is disabled while the npm account is suspended. The restore checklist is in [NPM_RESTORE.md](NPM_RESTORE.md).
+npmjs bootstrap is pending. The package is not on npmjs yet; [NPM_RESTORE.md](NPM_RESTORE.md) has the checklist.
 
 ## License
 
