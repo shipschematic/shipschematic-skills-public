@@ -1,20 +1,16 @@
 # @shipschematic/design-judges
 
-Public. Five agent skills that gate design work. Ten gated sections each. One failed gate blocks ship.
+Five agent skills that gate design work before ship. Each skill has ten gated sections. One failed gate blocks ship.
 
-The package lives on GitHub Packages. Add this to `.npmrc` and export a token with `read:packages` first:
+Published on npmjs. No registry authentication needed.
 
-```
-@shipschematic:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
+## Install
 
 ```bash
-export GITHUB_TOKEN=<token with read:packages>
 npx @shipschematic/design-judges
 ```
 
-Installs into `./.opencode/skills`.
+Installs all five skills into `./.opencode/skills`.
 
 | Flag | Target |
 |---|---|
@@ -24,6 +20,16 @@ Installs into `./.opencode/skills`.
 | `--dest <path>` | custom directory |
 | `--only <a,b>` | install named skills |
 | `--list` | list skills |
-| `--force` | overwrite |
+| `--force` | overwrite existing skills |
 
-Skills: `book-design-judge`, `cover-judge`, `page-judge`, `carousel-judge`, `thumbnail-judge`.
+Without `--force`, existing skills are skipped.
+
+## Skills
+
+| Skill | Use for | Install only this skill |
+|---|---|---|
+| `book-design-judge` | Print book cover or interior page, 7×9.25 in, two-ink | `npx @shipschematic/design-judges --only book-design-judge` |
+| `cover-judge` | A5 screen-edition book cover, HTML and PDF | `npx @shipschematic/design-judges --only cover-judge` |
+| `page-judge` | A5 screen-edition book page, type, figures, accessibility | `npx @shipschematic/design-judges --only page-judge` |
+| `carousel-judge` | LinkedIn, Instagram, and X carousels | `npx @shipschematic/design-judges --only carousel-judge` |
+| `thumbnail-judge` | YouTube thumbnail, 1280×720, mobile-first | `npx @shipschematic/design-judges --only thumbnail-judge` |

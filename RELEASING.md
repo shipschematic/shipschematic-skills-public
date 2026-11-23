@@ -1,24 +1,11 @@
 # Releasing
 
-Packages publish to GitHub Packages from GitHub Actions. Do not run `npm publish` from a laptop, except the one-time npmjs bootstrap in [NPM_RESTORE.md](NPM_RESTORE.md).
+Packages publish to npmjs from GitHub Actions. Do not run `npm publish` from a laptop.
 
-- Registry: `https://npm.pkg.github.com`
+- Registry: `https://registry.npmjs.org/`
 - Scope: `@shipschematic`
 - Package: `@shipschematic/design-judges`
-
-## First publish
-
-The Release workflow publishes the current version when that version is not on the registry yet. Start it once by hand:
-
-```bash
-gh workflow run release.yml
-```
-
-Verify:
-
-```bash
-npm view @shipschematic/design-judges version --registry=https://npm.pkg.github.com
-```
+- Auth: npm Trusted Publishing (OIDC). No long-lived npm token.
 
 ## Normal release
 
@@ -32,43 +19,55 @@ npx changeset
 3. Merge the pull request after CI passes.
 4. The Release workflow opens or updates the `Version Packages` pull request.
 5. Merge the `Version Packages` pull request.
-6. The Release workflow validates, publishes to GitHub Packages, creates the package tag and GitHub release, and verifies the registry version.
+6. The Release workflow validates, publishes to npmjs with provenance, creates the package tag and GitHub release, and verifies the registry version.
+
+## New package
+
+npm Trusted Publishing requires the package to exist. Publish the first version once from a trusted local session with 2FA, then bind it. Do not reuse an existing version.
+
+## Trusted publisher
+
+The package must be bound to the exact workflow that runs `npm publish`. For this repo that is `release.yml`.
+
+One-time setup, after the workflow exists on `main`:
+
+```bash
+npm trust github @shipschematic/design-judges \
+  --file release.yml \
+  --repository shipschematic/shipschematic-skills-public \
+  --allow-publish -y
+
+npm trust list @shipschematic/design-judges
+```
+
+The binding requires 2FA. Repository, workflow filename, and optional environment are case-sensitive. If `release.yml` is renamed or moved, rebind before the next release.
 
 ## Install
 
-GitHub Packages requires authentication even for public packages. Consumers need a token with `read:packages`.
-
-Add to `.npmrc`:
-
-```
-@shipschematic:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-Then:
+Published on npmjs. No registry authentication needed.
 
 ```bash
-export GITHUB_TOKEN=<token with read:packages>
 npx @shipschematic/design-judges
 ```
 
 ## Guardrails
 
 - CI-only publishing.
-- CI authenticates with the workflow `GITHUB_TOKEN` (`packages: write`). No long-lived token in GitHub Secrets.
+- OIDC Trusted Publishing. No npm tokens in GitHub Secrets.
+- `release.yml` is the trusted workflow. Do not rename it without rebinding.
+- The release job needs `id-token: write` and npm CLI 11.5.1 or later.
 - `main` requires the `validate` status check and linear history.
 - Force pushes and branch deletion are disabled.
+- Versions are immutable. Let Changesets bump them.
 
 ## Troubleshooting
 
-`E401 Unauthorized`: the token is missing. Locally, set `GITHUB_TOKEN` and keep the `${GITHUB_TOKEN}` placeholder in `.npmrc`. In CI, confirm the job sets `NODE_AUTH_TOKEN`.
+`EOTP` in CI: Trusted Publishing is not active. Check the binding, the workflow filename, the repository, and `id-token: write`.
 
-`403 Forbidden`: the token lacks `write:packages`, or org policy blocks the package. CI needs `permissions: packages: write`.
+`ENEEDAUTH` or `404` on publish: the trusted publisher does not match the running workflow, or the package does not exist. The repository, workflow file, and environment must match exactly.
 
 `version already exists`: do not reuse a version. Add a changeset and let Changesets bump it.
 
 `E404` right after a successful publish: registry propagation can lag. Verification retries for 30 seconds.
 
-## npmjs (bootstrap pending)
-
-The package is not on npmjs yet. [NPM_RESTORE.md](NPM_RESTORE.md) has the one-time bootstrap and Trusted Publishing checklist. The npmjs CI workflow is not wired. `1.0.0` is already on GitHub Packages; the bootstrap publishes that same version to npmjs. After bootstrap, do not bump one registry alone.
+`403 Forbidden`: the npm account or package permissions block publishing. Do not retry a suspended response in a loop.
