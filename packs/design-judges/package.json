@@ -1,6 +1,6 @@
 {
   "name": "@shipschematic/design-judges",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Public design judge skills for book covers, pages, carousels, and YouTube thumbnails.",
   "type": "module",
   "bin": {
