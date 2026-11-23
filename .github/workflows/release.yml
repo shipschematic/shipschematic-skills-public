@@ -32,6 +32,16 @@ jobs:
       - run: npm install -g npm@^11.5.1
       - run: npm ci
       - run: npm run validate
+      # Changesets present: this run opens/updates the Version Packages PR.
+      # No changesets: this run publishes unpublished versions.
+      - name: Check release mode
+        id: release-mode
+        run: |
+          if compgen -G ".changeset/*.md" > /dev/null; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
       - id: changesets
         uses: changesets/action@v1
         with:
@@ -46,6 +56,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
       - name: Verify npm and create release metadata
+        if: steps.release-mode.outputs.publish == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run post-release
