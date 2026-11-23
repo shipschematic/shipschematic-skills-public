@@ -12,6 +12,7 @@
     "list": "node scripts/list.js",
     "validate": "npm pack --workspaces --dry-run",
     "verify:npm": "node scripts/verify-npm-release.mjs",
+    "post-release": "node scripts/post-release.mjs",
     "changeset": "changeset",
     "version": "changeset version && npm install --package-lock-only --ignore-scripts",
     "release": "changeset publish"
