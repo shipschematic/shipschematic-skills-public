@@ -19,7 +19,7 @@ npx changeset
 3. Merge the pull request after CI passes.
 4. The Release workflow opens or updates the `Version Packages` pull request.
 5. Merge the `Version Packages` pull request.
-6. The Release workflow validates, publishes to npmjs with provenance, creates the package tag and GitHub release, and verifies the registry version.
+6. The Release workflow validates, publishes to npmjs with provenance, verifies the registry metadata and tarball, then pushes tag `v<version>` and creates the GitHub release. `npm run post-release` is idempotent; re-run Release if tagging fails after a successful publish.
 
 ## New package
 
@@ -68,6 +68,6 @@ npx @shipschematic/design-judges
 
 `version already exists`: do not reuse a version. Add a changeset and let Changesets bump it.
 
-`E404` right after a successful publish: registry propagation can lag. Verification retries for 30 seconds.
+`E404` right after a successful publish: registry propagation can lag. Verification retries for 5 minutes, then checks the published tarball.
 
 `403 Forbidden`: the npm account or package permissions block publishing. Do not retry a suspended response in a loop.

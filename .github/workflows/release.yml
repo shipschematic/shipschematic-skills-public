@@ -19,7 +19,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -39,12 +39,13 @@ jobs:
           publish: npm run release
           commit: "chore(release): version packages"
           title: "chore(release): version packages"
-          createGithubReleases: true
+          # Changesets 3 no longer prints the "New tag:" lines this action parses.
+          # Tagging and GitHub releases are handled by scripts/post-release.mjs.
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
-      - name: Verify npm publication
-        if: steps.changesets.outputs.published == 'true'
+      - name: Verify npm and create release metadata
         env:
-          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
-        run: npm run verify:npm
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run post-release
