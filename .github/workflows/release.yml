@@ -10,17 +10,16 @@ concurrency:
   group: release
   cancel-in-progress: false
 
+# Trusted publisher: shipschematic/shipschematic-skills-public, release.yml.
 permissions:
   contents: write
   pull-requests: write
-  packages: write
+  id-token: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,10 +28,12 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          registry-url: https://npm.pkg.github.com
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@^11.5.1
       - run: npm ci
       - run: npm run validate
-      - uses: changesets/action@v1
+      - id: changesets
+        uses: changesets/action@v1
         with:
           version: npm run version
           publish: npm run release
@@ -41,5 +42,9 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Verify GitHub Packages publication
-        run: node scripts/verify-github-packages.mjs
+          NPM_CONFIG_PROVENANCE: "true"
+      - name: Verify npm publication
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+        run: npm run verify:npm

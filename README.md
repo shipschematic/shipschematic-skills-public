@@ -10,7 +10,7 @@ Public skill packs. One repo, one pack per job, one installer per pack.
 
 ## Skills
 
-| Skill | Judges | Install |
+| Skill | Use for | Install |
 |---|---|---|
 | `book-design-judge` | Print book cover or interior page, 7×9.25 in, two-ink | `npx @shipschematic/design-judges --only book-design-judge` |
 | `cover-judge` | A5 screen-edition book cover, HTML and PDF | `npx @shipschematic/design-judges --only cover-judge` |
@@ -20,17 +20,13 @@ Public skill packs. One repo, one pack per job, one installer per pack.
 
 ## Install
 
-The package lives on GitHub Packages, which requires authentication even for public packages. Add this to `.npmrc` and export a token with `read:packages`:
-
-```
-@shipschematic:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
+Published on npmjs. No registry authentication needed.
 
 ```bash
-export GITHUB_TOKEN=<token with read:packages>
 npx @shipschematic/design-judges
 ```
+
+Installs all five skills into `./.opencode/skills`.
 
 Targets:
 
@@ -57,7 +53,7 @@ scripts/
   install.js              installer source
   sync-bin.js             copies the installer into each pack
   list.js
-.github/workflows/        CI and GitHub Packages release
+.github/workflows/        CI and npm release
 .changeset/               versioning and changelogs
 ```
 
@@ -70,27 +66,19 @@ Add a pack:
 
 ## Release
 
-Releases are CI-only. The package publishes to GitHub Packages with the workflow `GITHUB_TOKEN`; no long-lived npm token is stored.
+Releases are CI-only. The package publishes to npmjs from GitHub Actions with Trusted Publishing (OIDC). No long-lived npm token is stored.
 
-First publish:
-
-```bash
-gh workflow run release.yml
-```
-
-For later releases, add a changeset:
+Add a changeset:
 
 ```bash
 npx changeset
 ```
 
-Merge the PR, merge the Version Packages PR, and the Release workflow publishes, tags, and creates a GitHub release.
+Merge the PR, merge the Version Packages PR, and the Release workflow publishes to npmjs with provenance, tags the package, and creates a GitHub release.
 
-Never run `npm publish` by hand, except the one-time npmjs bootstrap in [NPM_RESTORE.md](NPM_RESTORE.md). Versions come from Changesets.
+Never run `npm publish` by hand. Versions come from Changesets.
 
 See [RELEASING.md](RELEASING.md) for the full checklist and troubleshooting.
-
-npmjs bootstrap is pending. The package is not on npmjs yet; [NPM_RESTORE.md](NPM_RESTORE.md) has the checklist.
 
 ## License
 
