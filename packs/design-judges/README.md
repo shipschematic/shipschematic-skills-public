@@ -8,17 +8,19 @@ Five design judge skills for AI coding agents. Each skill reviews one design sur
 npx @shipschematic/design-judges
 ```
 
-Installs all five skills into `./.opencode/skills`. Requires Node.js 18 or newer.
+Installs all five skills into `./.agents/skills`. Requires Node.js 18 or newer.
 
 | Flag | Target |
 | --- | --- |
-| `--global` | `~/.config/opencode/skills` |
+| `--global` | `~/.agents/skills` |
 | `--claude` | `./.claude/skills` |
 | `--global --claude` | `~/.claude/skills` |
 | `--dest <path>` | Custom directory |
 | `--only <a,b>` | Install named skills |
 | `--list` | List skills |
 | `--force` | Overwrite existing skills |
+
+Targets are resolved for Linux, macOS, and Windows.
 
 ## Skills
 

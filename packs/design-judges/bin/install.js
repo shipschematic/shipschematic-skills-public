@@ -20,15 +20,15 @@ const help = `
 Install ${pkg.name}.
 
 Usage:
-  npx ${pkg.name}                    install into ./.opencode/skills
-  npx ${pkg.name} --global           install into ~/.config/opencode/skills
+  npx ${pkg.name}                    install into ./.agents/skills
+  npx ${pkg.name} --global           install into ~/.agents/skills
   npx ${pkg.name} --claude           install into ./.claude/skills
   npx ${pkg.name} --global --claude  install into ~/.claude/skills
   npx ${pkg.name} --dest <path>      install into a custom directory
 
 Options:
   -g, --global     user-level skill directory
-  -c, --claude     Claude Code layout instead of OpenCode
+  -c, --claude     Claude Code layout instead of .agents
   -f, --force      overwrite installed skills
       --only <a,b> install only the named skills
       --list       list skills in this pack
@@ -62,10 +62,10 @@ const force = has("--force") || has("-f");
 const defaultDest = global
   ? claude
     ? join(homedir(), ".claude", "skills")
-    : join(homedir(), ".config", "opencode", "skills")
+    : join(homedir(), ".agents", "skills")
   : claude
     ? join(process.cwd(), ".claude", "skills")
-    : join(process.cwd(), ".opencode", "skills");
+    : join(process.cwd(), ".agents", "skills");
 
 const dest = value("--dest") ? resolve(value("--dest")) : defaultDest;
 
