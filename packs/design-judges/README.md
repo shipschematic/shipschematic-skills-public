@@ -1,8 +1,6 @@
 # @shipschematic/design-judges
 
-Five agent skills that gate design work before ship. Each skill has ten gated sections. One failed gate blocks ship.
-
-Published on npmjs. No registry authentication needed.
+Five design judge skills for AI coding agents. Each skill reviews one design surface before ship. A failed gate blocks ship.
 
 ## Install
 
@@ -10,26 +8,24 @@ Published on npmjs. No registry authentication needed.
 npx @shipschematic/design-judges
 ```
 
-Installs all five skills into `./.opencode/skills`.
+Installs all five skills into `./.opencode/skills`. Requires Node.js 18 or newer.
 
 | Flag | Target |
-|---|---|
+| --- | --- |
 | `--global` | `~/.config/opencode/skills` |
 | `--claude` | `./.claude/skills` |
 | `--global --claude` | `~/.claude/skills` |
-| `--dest <path>` | custom directory |
-| `--only <a,b>` | install named skills |
-| `--list` | list skills |
-| `--force` | overwrite existing skills |
-
-Without `--force`, existing skills are skipped.
+| `--dest <path>` | Custom directory |
+| `--only <a,b>` | Install named skills |
+| `--list` | List skills |
+| `--force` | Overwrite existing skills |
 
 ## Skills
 
-| Skill | Use for | Install only this skill |
-|---|---|---|
-| `book-design-judge` | Print book cover or interior page, 7×9.25 in, two-ink | `npx @shipschematic/design-judges --only book-design-judge` |
-| `cover-judge` | A5 screen-edition book cover, HTML and PDF | `npx @shipschematic/design-judges --only cover-judge` |
-| `page-judge` | A5 screen-edition book page, type, figures, accessibility | `npx @shipschematic/design-judges --only page-judge` |
-| `carousel-judge` | LinkedIn, Instagram, and X carousels | `npx @shipschematic/design-judges --only carousel-judge` |
-| `thumbnail-judge` | YouTube thumbnail, 1280×720, mobile-first | `npx @shipschematic/design-judges --only thumbnail-judge` |
+| Skill | Use for |
+| --- | --- |
+| `book-design-judge` | Print book cover or interior page: 7×9.25 in, two-ink, print files |
+| `cover-judge` | A5 screen-edition book cover: 148 × 210 mm, two-ink, HTML and PDF |
+| `page-judge` | A5 screen-edition interior page: type, figures, accessibility, HTML and PDF |
+| `carousel-judge` | LinkedIn, Instagram, and X carousels: hook, copy, design, flow, CTA |
+| `thumbnail-judge` | YouTube thumbnails: 1280 × 720, mobile-first, attention and feed proof |
