@@ -8,17 +8,19 @@ Public skill packs. One repo, one pack per job, one installer per pack.
 npx @shipschematic/design-judges
 ```
 
-Installs all five design judge skills into `./.opencode/skills`.
+Installs all five design judge skills into `./.agents/skills`.
 
 | Flag | Target |
 | --- | --- |
-| `--global` | `~/.config/opencode/skills` |
+| `--global` | `~/.agents/skills` |
 | `--claude` | `./.claude/skills` |
 | `--global --claude` | `~/.claude/skills` |
 | `--dest <path>` | Custom directory |
 | `--only <a,b>` | Install named skills |
 | `--list` | List skills |
 | `--force` | Overwrite existing skills |
+
+Targets are resolved for Linux, macOS, and Windows.
 
 ## Packs
 
