@@ -6,9 +6,10 @@ Public skill packs. One repo, one pack per job, one installer per pack.
 
 ```bash
 npx @shipschematic/design-judges
+npx @shipschematic/dev-loop
 ```
 
-Installs all five design judge skills into `./.agents/skills`.
+Installs pack skills into `./.agents/skills`.
 
 | Flag | Target |
 | --- | --- |
@@ -27,3 +28,4 @@ Targets are resolved for Linux, macOS, and Windows.
 | Pack | Use for |
 | --- | --- |
 | `@shipschematic/design-judges` | Book, cover, page, carousel, and YouTube thumbnail design review |
+| `@shipschematic/dev-loop` | Dev-cycle and feedback-loop setup: propose, plan, build, verify, CI gate, archive |
