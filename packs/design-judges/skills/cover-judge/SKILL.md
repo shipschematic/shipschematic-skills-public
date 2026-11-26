@@ -4,11 +4,17 @@ description: Judge an A5 screen-edition book cover — 148 × 210 mm, two-ink, P
 license: MIT
 metadata:
   version: "2.0"
+  source: https://github.com/shipschematic/shipschematic-skills-public
+  package: "@shipschematic/design-judges"
 ---
 
 # Cover Judge
 
 Gate every cover. One failed gate = no ship.
+
+## Install
+
+Install with npm: `npx @shipschematic/design-judges --only cover-judge`. Omit `--only` to install all five design judges. Requires Node.js 18 or newer.
 
 **Spec:** A5 screen edition — 148 × 210 mm (1:1.418), digital only. Cream `#FFFDF3`, ink `#2A1A10`, ink-2 `#6B5648`, oxblood `#6F1D1B`. Playfair Display + Inter.
 

@@ -4,11 +4,17 @@ description: Judge a print book cover or interior page — 7×9.25 in, two-ink, 
 license: MIT
 metadata:
   version: "2.0"
+  source: https://github.com/shipschematic/shipschematic-skills-public
+  package: "@shipschematic/design-judges"
 ---
 
 # Book Design Judge
 
 Gate every artifact. One failed gate = no ship.
+
+## Install
+
+Install with npm: `npx @shipschematic/design-judges --only book-design-judge`. Omit `--only` to install all five design judges. Requires Node.js 18 or newer.
 
 ## Spec
 

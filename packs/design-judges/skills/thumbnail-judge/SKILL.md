@@ -4,11 +4,17 @@ description: Judge a YouTube thumbnail — 1280 × 720, AHQ spine, mobile-first.
 license: MIT
 metadata:
   version: "2.0"
+  source: https://github.com/shipschematic/shipschematic-skills-public
+  package: "@shipschematic/design-judges"
 ---
 
 # Thumbnail Judge
 
 Gate every thumbnail. One failed gate = no ship.
+
+## Install
+
+Install with npm: `npx @shipschematic/design-judges --only thumbnail-judge`. Omit `--only` to install all five design judges. Requires Node.js 18 or newer.
 
 **Spec:** YouTube custom thumbnail — 1280 × 720 minimum (1920 × 1080 preferred), 16:9, sRGB, JPG or PNG, ≤ 2 MB. Goal: stop the scroll and convert to click, while opening a curiosity gap the title and video must close. Two or three visual elements maximum. High-contrast system only.
 

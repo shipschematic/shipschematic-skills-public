@@ -4,11 +4,17 @@ description: Judge a multi-platform carousel — LinkedIn, Instagram, X. Use whe
 license: MIT
 metadata:
   version: "2.0"
+  source: https://github.com/shipschematic/shipschematic-skills-public
+  package: "@shipschematic/design-judges"
 ---
 
 # Carousel Judge
 
 Gate every carousel. One failed gate = no ship.
+
+## Install
+
+Install with npm: `npx @shipschematic/design-judges --only carousel-judge`. Omit `--only` to install all five design judges. Requires Node.js 18 or newer.
 
 **Spec:** LinkedIn document carousel at 1080 × 1350 or 1080 × 1080. Instagram feed at 1080 × 1350. X thread at 1600 × 1600. B2B, founder or agency seller. Goal: stop the scroll **and** convert to sale, demo, or qualified DM. Two-ink system on screen; no print object.
 

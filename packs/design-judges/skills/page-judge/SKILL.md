@@ -4,11 +4,17 @@ description: Judge an A5 screen-edition book page — 148 × 210 mm, two-ink, Pl
 license: MIT
 metadata:
   version: "2.0"
+  source: https://github.com/shipschematic/shipschematic-skills-public
+  package: "@shipschematic/design-judges"
 ---
 
 # Page Judge
 
 Gate every page. One failed gate = no ship.
+
+## Install
+
+Install with npm: `npx @shipschematic/design-judges --only page-judge`. Omit `--only` to install all five design judges. Requires Node.js 18 or newer.
 
 **Spec:** A5 screen edition — 148 × 210 mm, digital only. Cream `#FFFDF3`, ink `#2A1A10`, ink-2 `#6B5648`, oxblood `#6F1D1B`. Playfair Display + Inter.
 
