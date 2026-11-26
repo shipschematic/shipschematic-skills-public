@@ -94,10 +94,8 @@ function tagTarget(pkg) {
 
 function ensureTag(tag, target) {
   if (remoteTagExists(tag)) return false;
-  if (!localTagExists(tag)) {
-    capture("git", ["tag", tag, target]);
-  }
-  run("git", ["push", "origin", `refs/tags/${tag}`]);
+  const repo = process.env.GITHUB_REPOSITORY ?? capture("gh", ["repo", "view", "--json", "nameWithOwner", "-q", ".nameWithOwner"]);
+  run("gh", ["api", "-X", "POST", `repos/${repo}/git/refs`, "-f", `ref=refs/tags/${tag}`, "-f", `sha=${target}`]);
   return true;
 }
 
