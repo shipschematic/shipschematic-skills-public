@@ -29,3 +29,7 @@ Targets are resolved for Linux, macOS, and Windows.
 | --- | --- |
 | `@shipschematic/design-judges` | Book, cover, page, carousel, and YouTube thumbnail design review |
 | `@shipschematic/dev-loop` | Dev-cycle and feedback-loop setup: propose, plan, build, verify, CI gate, archive |
+
+## Release
+
+See [RELEASE.md](./RELEASE.md). Local `npm run check` = CI = pre-release gate. Build artifact once, publish from artifact, verify on npm.

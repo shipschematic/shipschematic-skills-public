@@ -10,16 +10,29 @@ concurrency:
   group: release
   cancel-in-progress: false
 
-# Trusted publisher: shipschematic/shipschematic-skills-public, release.yml.
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
-
 jobs:
-  release:
+  check:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      has_changesets: ${{ steps.mode.outputs.has_changesets }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,35 +41,92 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@^11.5.1
       - run: npm ci
-      - run: npm run validate
-      # Changesets present: this run opens/updates the Version Packages PR.
-      # No changesets: this run publishes unpublished versions.
+      - name: Build immutable artifacts
+        run: npm run build:artifacts
       - name: Check release mode
-        id: release-mode
+        id: mode
         run: |
           if compgen -G ".changeset/*.md" > /dev/null; then
-            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "has_changesets=true" >> "$GITHUB_OUTPUT"
           else
-            echo "publish=true" >> "$GITHUB_OUTPUT"
+            echo "has_changesets=false" >> "$GITHUB_OUTPUT"
           fi
-      - id: changesets
-        uses: changesets/action@v1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm-artifacts
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 7
+
+  version-pr:
+    needs: build
+    if: needs.build.outputs.has_changesets == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: changesets/action@v1
         with:
           version: npm run version
-          publish: npm run release
           commit: "chore(release): version packages"
           title: "chore(release): version packages"
-          # Changesets 3 no longer prints the "New tag:" lines this action parses.
-          # Tagging and GitHub releases are handled by scripts/post-release.mjs.
           createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    needs: build
+    if: needs.build.outputs.has_changesets == 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@^11.5.1
+      - uses: actions/download-artifact@v4
+        with:
+          name: npm-artifacts
+          path: artifacts/
+      - name: Publish prebuilt artifacts
+        run: node scripts/publish-artifacts.mjs
+        env:
           NPM_CONFIG_PROVENANCE: "true"
+
+  smoke:
+    needs: [build, publish]
+    if: needs.build.outputs.has_changesets == 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
       - name: Verify npm and create release metadata
-        if: steps.release-mode.outputs.publish == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run post-release
