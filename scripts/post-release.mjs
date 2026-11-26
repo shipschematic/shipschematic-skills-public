@@ -95,7 +95,7 @@ function tagTarget(pkg) {
 function ensureTag(tag, target) {
   if (remoteTagExists(tag)) return false;
   const repo = process.env.GITHUB_REPOSITORY ?? capture("gh", ["repo", "view", "--json", "nameWithOwner", "-q", ".nameWithOwner"]);
-  run("gh", ["api", "-X", "POST", `repos/${repo}/git/refs`, "-f", `ref=refs/tags/${tag}`, "-f", `sha=${target}`]);
+  capture("gh", ["api", "-X", "POST", `repos/${repo}/git/refs`, "-f", `ref=refs/tags/${tag}`, "-f", `sha=${target}`]);
   return true;
 }
 
@@ -161,10 +161,19 @@ for (const pkg of packages) {
     continue;
   }
 
-  const tagCreated = ensureTag(tag, target);
-  const releaseCreated = ensureRelease(tag);
-  console.log(
-    `${pkg.name}@${pkg.version}: tag ${tag} ${tagCreated ? "created" : "exists"}; ` +
-      `release ${releaseCreated ? "created" : "exists"}`,
-  );
+  try {
+    const tagCreated = ensureTag(tag, target);
+    const releaseCreated = ensureRelease(tag);
+    console.log(
+      `${pkg.name}@${pkg.version}: tag ${tag} ${tagCreated ? "created" : "exists"}; ` +
+        `release ${releaseCreated ? "created" : "exists"}`,
+    );
+  } catch (error) {
+    const msg = String(error?.stderr ?? error?.message ?? error);
+    if (msg.includes("Resource not accessible by integration") || msg.includes("refusing to allow")) {
+      console.warn(`::warning::${pkg.name}@${pkg.version}: could not create tag/release with GITHUB_TOKEN (${msg.split("\n")[0]}). npm package is verified; create tag ${tag} manually or with a token that has workflow permission.`);
+      continue;
+    }
+    throw error;
+  }
 }
